@@ -60,41 +60,15 @@ export default function Home() {
     return () => clearInterval(timerInterval);
   }, [isPlaying, isPaused, isGameOver]);
 
-  // 3. Lógica de Match (Comparar cartas)
+// 3. Lógica de Match (Comparar cartas)
+  // TODO: [Maria Jose] debe implementar esta lógica.
+  // Detectar si las 2 cartas volteadas son iguales.
+  // Si son iguales: sonar acierto, sumar puntos, sumar tiempo y limpiar volteadas.
+  // Si no son iguales: esperar 800ms y volver a voltearlas.
   useEffect(() => {
-    if (flippedCards.length === 2) {
-      const [first, second] = flippedCards;
-      
-      if (first.value === second.value) {
-        // MATCH!
-        playSound('/match.mp3', 0.6);
-        setCards((prev) =>
-          prev.map((card) =>
-            card.id === first.id || card.id === second.id
-              ? { ...card, isMatched: true }
-              : card
-          )
-        );
-        setMatchedPairs((prev) => prev + 1);
-        setScore((prev) => prev + (10 * level));
-        setTimeLeft((prev) => prev + 5);
-        triggerTimeBonus(); // Efecto visual +5s
-        setFlippedCards([]);
-      } else {
-        // NO MATCH - Esperar y voltear
-        setTimeout(() => {
-          setCards((prev) =>
-            prev.map((card) =>
-              card.id === first.id || card.id === second.id
-                ? { ...card, isFlipped: false }
-                : card
-            )
-          );
-          setFlippedCards([]);
-        }, 800);
-      }
-    }
+     // AQUI VA TU CÓDIGO
   }, [flippedCards]);
+
 
   // 4. Verificar Nivel Completado
   useEffect(() => {
@@ -197,25 +171,11 @@ export default function Home() {
   };
 
   const saveScore = () => {
-    const name = playerName.trim() || "Anonimo";
-    const newRecord = { name, score, date: new Date().toLocaleDateString() };
-    const newLeaderboard = [...leaderboard, newRecord]
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 5);
-    
-    localStorage.setItem('devMemoryScores', JSON.stringify(newLeaderboard));
-    setLeaderboard(newLeaderboard);
-    
-    // Confeti
-    const duration = 3000;
-    const end = Date.now() + duration;
-    (function frame() {
-      confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 } });
-      confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 } });
-      if (Date.now() < end) requestAnimationFrame(frame);
-    }());
-
-    setIsGameOver(false); // Cierra modal
+    // TODO: [Jhon] debe implementar el guardado.
+    // 1. Crear objeto con nombre, puntaje y fecha.
+    // 2. Guardar en LocalStorage y actualizar estado.
+    // 3. Lanzar confeti.
+    // 4. Cerrar modal.
   };
 
   const triggerTimeBonus = () => {
