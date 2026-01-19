@@ -61,10 +61,37 @@ export default function Home() {
   }, [isPlaying, isPaused, isGameOver]);
 
 // 3. Lógica de Match (Comparar cartas)
-  // TODO: [Maria Jose] debe implementar esta lógica.
-  // Detectar si las 2 cartas volteadas son iguales.
-  // Si son iguales: sonar acierto, sumar puntos, sumar tiempo y limpiar volteadas.
-  // Si no son iguales: esperar 800ms y volver a voltearlas.
+  if (flippedCards.length === 2) {
+      const [first, second] = flippedCards;
+      
+      if (first.value === second.value) {
+        playSound('/match.mp3', 0.6);
+        setCards((prev) =>
+          prev.map((card) =>
+            card.id === first.id || card.id === second.id
+              ? { ...card, isMatched: true }
+              : card
+          )
+        );
+        setMatchedPairs((prev) => prev + 1);
+        setScore((prev) => prev + (10 * level));
+        setTimeLeft((prev) => prev + 5);
+        triggerTimeBonus();
+        setFlippedCards([]);
+      } else {
+        setTimeout(() => {
+          setCards((prev) =>
+            prev.map((card) =>
+              card.id === first.id || card.id === second.id
+                ? { ...card, isFlipped: false }
+                : card
+            )
+          );
+          setFlippedCards([]);
+        }, 800);
+      }
+    }
+
   useEffect(() => {
      // AQUI VA TU CÓDIGO
   }, [flippedCards]);
